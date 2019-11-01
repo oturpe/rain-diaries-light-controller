@@ -1,0 +1,7 @@
+projectName=light-controller
+sourceDir=src
+targetDir=target
+mcu=atmega328p
+programmer=avrispmkii
+baudrate=19200
+port=usb
