@@ -30,8 +30,7 @@ DistanceSensorController::DistanceSensorController(
     echoPinStatic = echoPin;
 
     setDataDirection(triggerPort, triggerPin, true);    
-    setDataDirection(echoPort, echoPin, false);    
-    setData(echoPort, echoPin, false);
+    setDataDirection(echoPort, echoPin, false, false);    
 
     setData(triggerPort, triggerPin, false);
 

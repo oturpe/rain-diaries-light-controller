@@ -42,6 +42,17 @@ enum CounterTop {
     TOP_OCRA
 };
 
+/// \brief
+///    Read pin value.
+///
+/// \param port
+///    Pin port
+///
+/// \param pin
+///    Pin index
+///
+/// \return
+///    If pin is high.
 bool getData(Port port, int pin);
 
 /// \brief
@@ -70,7 +81,11 @@ void setData(Port port, int pin, bool enable);
 ///
 /// \param enable
 ///    If pin is enabled (output) or disabled (input)
-void setDataDirection(Port port, int pin, bool enable);
+///
+/// \param enablePullup
+///    If pullup resistor is enabled. This value is only used when configuring
+///    an input pin.
+void setDataDirection(Port port, int pin, bool enable, bool enablePullup = true);
 
 /// \brief
 ///    Enables pin change intterupt on the given pin.

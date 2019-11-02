@@ -54,7 +54,7 @@ void setData(Port port, int pin, bool enable) {
     }
 }
 
-void setDataDirection(Port port, int pin, bool enable) {
+void setDataDirection(Port port, int pin, bool enable, bool enablePullup) {
     if (enable) {
         // Enable pin
         switch (port) {
@@ -77,12 +77,30 @@ void setDataDirection(Port port, int pin, bool enable) {
         switch (port) {
             case B:
                 DDRB &= ~BV(pin);
+                if (enablePullup) {
+                    PORTB |= BV(pin);
+                }
+                else {
+                    PORTB &= ~BV(pin);
+                }
                 return;
             case C:
                 DDRC &= ~BV(pin);
+                if (enablePullup) {
+                    PORTC |= BV(pin);
+                }
+                else {
+                    PORTC &= ~BV(pin);
+                }
                 return;
             case D:
                 DDRD &= ~BV(pin);
+                if (enablePullup) {
+                    PORTD |= BV(pin);
+                }
+                else {
+                    PORTD &= ~BV(pin);
+                }
                 return;
             default:
                 // Should not happen
