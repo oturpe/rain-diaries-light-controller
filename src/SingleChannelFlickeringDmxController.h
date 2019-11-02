@@ -1,6 +1,8 @@
 #ifndef _H_SINGLE_CHANNEL_FLICKERING_DMX_CONTROLLER
 #define _H_SINGLE_CHANNEL_FLICKERING_DMX_CONTROLLER
 
+#include <stdint.h>
+
 /// \class SingleChannelFlickeringDmxController
 ///
 /// Transmits a basically constant but flickering sequence in a single dmx
@@ -24,6 +26,13 @@ public:
 
 public:
     /// \brief
+    ///    Sets if flicker is enabled
+    ///
+    /// \param isFlickerEnabled
+    ///    If flicker is enabled
+    void setFlickerEnabled(bool isFlickerEnabled);
+
+    /// \brief
     ///    Instructs the controller to advance one step in sequence, essentially
     ///    stepping the controller's clock.
     void run();
@@ -36,6 +45,8 @@ private:
     /// Flicker intensity
     const uint8_t flicker;
 
+    /// If flicker if enabled.
+    bool isFlickerEnabled;
     /// Current value
     uint32_t counter;
 };

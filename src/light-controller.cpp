@@ -13,13 +13,19 @@
 
 #include "IndicatorController.h"
 #include "SingleChannelFlickeringDmxController.h"
+#include "DistanceSensorController.h"
 
 // Temp, needed for testing only
 #include "DMXSerial.h"
 
 int main() {
     IndicatorController indicator(C, 0, 20);
-    SingleChannelFlickeringDmxController dmx(1, 64, 20);
+    DistanceSensorController distanceSensorController(C, 2, C, 3);
+    SingleChannelFlickeringDmxController dmx(
+        1,
+        LIGHT_BRIGHTNESS_BASELINE,
+        LIGHT_FLICKER_INTENSITY
+    );
 
     sei();
 
@@ -29,6 +35,8 @@ int main() {
 
     while (true) {
          indicator.run();
+         float distance = distanceSensorController.run();
+         dmx.setFlickerEnabled(distance < DISTANCE_THRESHOLD);
          dmx.run();
         _delay_ms(LOOP_DELAY);
     }
