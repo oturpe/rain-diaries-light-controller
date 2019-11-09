@@ -12,5 +12,5 @@
 // Flicker intensity of the light. Given in same units as
 // LIGHT_BRIGHTNESS_BASELINE.
 #define LIGHT_FLICKER_INTENSITY 60
-// Distance treshold for starting the flicker. Given in units of centimeter.
+// Distance threshold for starting the flicker. Given in units of centimeter.
 #define DISTANCE_THRESHOLD 250
