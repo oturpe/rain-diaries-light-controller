@@ -39,19 +39,13 @@
 // These variables are not class members because they have to be reached by the interrupt implementations.
 // don't use these variable from outside, use the appropriate methods.
 
-int     _dmxChannel;  // the next channel byte to be sent.
+int _dmxChannel;  // the next channel byte to be sent.
 
-volatile unsigned int  _dmxMaxChannel = 32; // the last channel used for sending (1..32).
+volatile unsigned int _dmxMaxChannel = 32; // the last channel used for sending (1..32).
 
 // Array of DMX values (raw).
 // Entry 0 will never be used for DMX data but will store the startbyte (0 for DMX mode).
-uint8_t  _dmxData[DMXSERIAL_MAX+1];
-
-// This pointer will point to the next byte in _dmxData;
-uint8_t *_dmxDataPtr;
-
-// This pointer will point to the last byte in _dmxData;
-uint8_t *_dmxDataLastPtr;
+uint8_t _dmxData[DMXSERIAL_MAX+1];
 
 // Create a single class instance. Multiple class instances (multiple simultaneous DMX ports) are not supported.
 DMXSerialClass DMXSerial;
@@ -72,10 +66,6 @@ void DMXSerialClass::init()
 {
   // initialize global variables
   _dmxChannel = 0;
-  _dmxDataPtr = _dmxData;
-
-  _dmxMaxChannel = DMXSERIAL_MAX; // The default in Receiver mode is reading all possible 512 channels.
-  _dmxDataLastPtr = _dmxData + _dmxMaxChannel;
 
   // initialize the DMX buffer
   for (int n = 0; n < DMXSERIAL_MAX+1; n++) {
@@ -96,7 +86,6 @@ void DMXSerialClass::maxChannel(int channel)
   if (channel > DMXSERIAL_MAX) channel = DMXSERIAL_MAX;
 
   _dmxMaxChannel = channel;
-  _dmxDataLastPtr = _dmxData + channel;
 }
 
 
@@ -119,7 +108,7 @@ void DMXSerialClass::write(int channel, uint8_t value)
   // adjust parameters
   if (channel < 1) channel = 1;
   if (channel > DMXSERIAL_MAX) channel = DMXSERIAL_MAX;
-  if (value < 0)   value = 0;
+  if (value < 0) value = 0;
   if (value > 255) value = 255;
 
   // store value for later sending
@@ -128,7 +117,6 @@ void DMXSerialClass::write(int channel, uint8_t value)
   // Make sure we transmit enough channels for the ones used
   if (channel > _dmxMaxChannel) {
     _dmxMaxChannel = channel;
-    _dmxDataLastPtr = _dmxData + _dmxMaxChannel;
   }
 }
 
@@ -167,7 +155,6 @@ void _DMXSerialInit(uint16_t baud_setting, uint8_t mode, uint8_t format)
   // 2 stop bits and 8 bit character size, no parity
   UCSR0C = format;
 }
-
 
 // Setup Hardware for Sending
 void _DMXStartSending()
@@ -224,12 +211,8 @@ ISR(USART_UDRE_vect)
   _DMXSerialWriteByte(_dmxData[_dmxChannel++]);
 
   if (_dmxChannel > _dmxMaxChannel) {
-    _dmxChannel = -1; // this series is done. Next time: restart with break.
-    // get interrupt after this byte is actually transmitted
-    // UCSRnB = (1 << TXENn) | (1 << TXCIEn);
+     // this series is done. Next time: restart with break.
+     _dmxChannel = -1;
     _DMXSerialInit(Calcprescale(DMXSPEED), ((1 << TXEN0) | (1 << TXCIE0)), DMXFORMAT);
-  } // if
-
-} // ISR(USARTn_UDRE_vect)
-
-// The End
+  }
+}
