@@ -8,9 +8,9 @@
 #define LOOP_DELAY 25
 
 // Baseline brightness of the light. Given as value between 0 and 255.
-#define LIGHT_BRIGHTNESS_BASELINE 64
+#define LIGHT_BRIGHTNESS_BASELINE 115
 // Flicker intensity of the light. Given in same units as
 // LIGHT_BRIGHTNESS_BASELINE.
-#define LIGHT_FLICKER_INTENSITY 20
+#define LIGHT_FLICKER_INTENSITY 60
 // Distance treshold for starting the flicker. Given in units of centimeter.
-#define DISTANCE_THRESHOLD 200
+#define DISTANCE_THRESHOLD 250
